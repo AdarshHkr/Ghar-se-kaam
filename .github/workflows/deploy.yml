@@ -44,7 +44,7 @@ jobs:
           port: 2222 # Using your custom port
           script: |
             sudo -i
-            cd multiscreen
+            cd multiscreen/
             docker compose pull app
             docker compose up -d
             docker compose exec -T app npx prisma migrate deploy
