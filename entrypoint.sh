@@ -1,17 +1,16 @@
 #!/bin/sh
-# Exit immediately if a command exits with a non-zero status.
-set -e
 
-# --- Debugging Step ---
-# Print the DATABASE_URL to the container logs to verify it's being passed correctly.
-echo "--- Docker Entrypoint ---"
-echo "DATABASE_URL is: '$DATABASE_URL'"
-echo "-------------------------"
+# Wait for database to be ready
+echo "Waiting for database..."
+until nc -z db 5432; do
+  sleep 1
+done
+echo "Database is up!"
 
-# Run the Prisma migrations
-echo "Running database migrations..."
+# Run migrations
+echo "Running migrations..."
 npx prisma migrate deploy
 
-# Start the main application
-echo "Starting the application..."
+# Start the application
+echo "Starting app..."
 exec "$@"
