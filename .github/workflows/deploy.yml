@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 2222 # Using your custom port
           script: |
-            cd ~/multiscreen
+            cd /root/multiscreen
             docker compose pull app
             docker compose up -d
             docker compose exec -T app npx prisma migrate deploy
