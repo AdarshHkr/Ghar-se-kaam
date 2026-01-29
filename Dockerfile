@@ -21,37 +21,21 @@ RUN npm run build
 # ---
 
 # Stage 2: Runner
-# This stage creates the final, minimal image for production.
 FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# Create a non-root user for better security.
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy the standalone output, static assets, and the entrypoint script
-# from the 'builder' stage. This leverages Next.js's standalone output feature.
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
+# Use --chown to give the nextjs user ownership immediately
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/entrypoint.sh ./entrypoint.sh
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
-# CRITICAL FIX: Copy the prisma folder into the final image.
-# This is required for the migration command in entrypoint.sh to work.
-COPY --from=builder /app/prisma ./prisma
+RUN chmod +x entrypoint.sh
 
-# Switch to the non-root user.
 USER nextjs
-
-EXPOSE 3000
-
-ENV PORT=3000
-
-# Set the entrypoint to our new script, which will run migrations
-# before starting the app.
 ENTRYPOINT ["./entrypoint.sh"]
-
-# The command to start the application, which is passed to the entrypoint.
 CMD ["node", "server.js"]
