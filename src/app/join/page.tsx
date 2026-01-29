@@ -3,6 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 
+import Link from 'next/link';
+import Header from '@/components/Header';
+
 export default function JoinPage() {
   const [room, setRoom] = useState('');
   const [username, setUsername] = useState('');
@@ -51,7 +54,7 @@ export default function JoinPage() {
       setError('A network error occurred. Please try again.');
     }
   };
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isWaiting) return;
@@ -65,36 +68,58 @@ export default function JoinPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-900 text-white">
-      <div className="w-full max-w-md">
-        <div className="bg-gray-800 rounded-lg shadow-xl p-8">
-          {isWaiting ? (
-            <div className="text-center">
-              <h1 className="text-2xl font-bold mb-4">You are in the waiting room</h1>
-              <p className="text-gray-400">{statusMessage}</p>
-            </div>
-          ) : (
-            <>
-              <h1 className="text-3xl font-bold text-center mb-2">Join a Room</h1>
-              <p className="text-center text-gray-400 mb-8">Enter your name and the room name provided by the admin.</p>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300">Your Name</label>
-                  <input id="name" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"/>
-                </div>
-                <div>
-                  <label htmlFor="room" className="block text-sm font-medium text-gray-300">Room Name</label>
-                  <input id="room" type="text" value={room} onChange={(e) => setRoom(e.target.value)} required className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"/>
-                </div>
-                {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-                <button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                  Join as Participant
-                </button>
-              </form>
-            </>
-          )}
+    <>
+      <Header />
+      <main>
+        <div className="createRoomContainer">
+          <div className="form_area">
+            {isWaiting ? (
+              <div className="text-center">
+                <p className="title">Waiting Room</p>
+                <p className="sub_title" style={{ textAlign: 'center' }}>{statusMessage}</p>
+                <div className="animate-pulse-glow" style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#3B82F6', margin: '20px auto' }}></div>
+              </div>
+            ) : (
+              <>
+                <p className="title">Join a Room</p>
+                <form onSubmit={handleSubmit}>
+                  <div className="form_group">
+                    <label className="sub_title" htmlFor="name">Your Name</label>
+                    <input
+                      id="name"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                      className="form_style"
+                      placeholder="Enter your name"
+                    />
+                  </div>
+
+                  <div className="form_group">
+                    <label className="sub_title" htmlFor="room">Room Name</label>
+                    <input
+                      id="room"
+                      type="text"
+                      value={room}
+                      onChange={(e) => setRoom(e.target.value)}
+                      required
+                      className="form_style"
+                      placeholder="Enter room name"
+                    />
+                  </div>
+
+                  {error && <p style={{ color: '#F87171', fontSize: '14px', margin: '10px 0', textAlign: 'center' }}>{error}</p>}
+
+                  <button type="submit" className="btn">
+                    Join as Participant
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
