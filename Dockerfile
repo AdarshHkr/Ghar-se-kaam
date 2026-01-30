@@ -35,7 +35,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/entrypoint.sh ./entrypoint.sh
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 RUN chmod +x entrypoint.sh
-
+RUN npm install prisma@7.3.0
 USER nextjs
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["node", "server.js"]
