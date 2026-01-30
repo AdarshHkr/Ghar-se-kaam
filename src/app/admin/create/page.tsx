@@ -62,8 +62,8 @@ export default function AdminCreatePage() {
             <input
               id="roomName"
               type="text"
-              // value={roomName}
-              // onChange={(e) => setRoomName(e.target.value)}
+              value={roomName}
+              onChange={(e) => setRoomName(e.target.value)}
               required
               className="form_style"
               placeholder="Enter a room name"
@@ -76,10 +76,10 @@ export default function AdminCreatePage() {
             <input
               id="password"
               type="password"
-              // value={password}
-              // onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="form_style"
-              placeholder="Enter a password (optional)"
+              placeholder="Enter a password "
             />
           </div>
 
@@ -89,8 +89,8 @@ export default function AdminCreatePage() {
             <input
               id="adminName"
               type="text"
-              // value={adminName}
-              // onChange={(e) => setAdminName(e.target.value)}
+              value={adminName}
+              onChange={(e) => setAdminName(e.target.value)}
               required
               className="form_style"
               placeholder="Enter your name"
@@ -103,8 +103,7 @@ export default function AdminCreatePage() {
               // disabled={isLoading}
               className="btn"
             >
-              {/* {isLoading ? 'Creating...' : 'Create Room'} */}
-              Create Room
+              {isLoading ? 'Creating...' : 'Create Room'}
             </button>
             
             {/* Error message with updated color for dark theme */}
